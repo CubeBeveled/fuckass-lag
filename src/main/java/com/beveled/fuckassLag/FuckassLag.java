@@ -12,10 +12,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
-import java.util.Random;
+import java.util.Set;
+import java.util.stream.StreamSupport;
+
+import static com.beveled.fuckassLag.Utils.*;
 
 public final class FuckassLag extends JavaPlugin {
     private ProtocolManager protocolManager;
+    Set<PacketType> dontTouchPackets = Set.of(
+            PacketType.Play.Server.KEEP_ALIVE,
+            PacketType.Play.Client.KEEP_ALIVE,
+            PacketType.Play.Server.PLAYER_INFO,
+            PacketType.Play.Server.PLAYER_INFO_REMOVE,
+            PacketType.Play.Server.PLAYER_LIST_HEADER_FOOTER,
+            PacketType.Play.Client.TAB_COMPLETE
+    );
 
     @Override
     public void onLoad() {
@@ -23,9 +34,17 @@ public final class FuckassLag extends JavaPlugin {
         protocolManager = ProtocolLibrary.getProtocolManager();
 
         if (Settings.getInstance().getCancelS2CPackets() || Settings.getInstance().getDelayS2CPackets()) {
-            protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.LOWEST, PacketType.Play.Server.getInstance().values()) {
+            protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.LOWEST,
+                    StreamSupport.stream(PacketType.values().spliterator(), false)
+                            .filter(pt -> pt.getProtocol() == PacketType.Protocol.PLAY && pt.isServer() && pt.isSupported())
+                            .toArray(PacketType[]::new)
+            ) {
                 @Override
                 public void onPacketSending(PacketEvent event) {
+                    if (dontTouchPackets.contains(event.getPacket().getType())) {
+                        return;
+                    }
+
                     if (Settings.getInstance().getCancelS2CPackets()) {
                         if (Settings.getInstance().getCancelPacketMode() == Settings.CancelPacketMode.RANDOM) {
                             event.setCancelled(randomBoolean(Settings.getInstance().getCancelChance()));
@@ -50,9 +69,18 @@ public final class FuckassLag extends JavaPlugin {
         }
 
         if (Settings.getInstance().getCancelC2SPackets() || Settings.getInstance().getDelayC2SPackets()) {
-            protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.LOWEST, PacketType.Play.Client.getInstance().values()) {
+            protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.LOWEST,
+                    StreamSupport.stream(PacketType.values().spliterator(), false)
+                            .filter(pt -> pt.getProtocol() == PacketType.Protocol.PLAY && pt.getSender() == PacketType.Sender.CLIENT && pt.isSupported())
+                            .toArray(PacketType[]::new)
+            ) {
                 @Override
                 public void onPacketReceiving(PacketEvent event) {
+                    if (event.getPacket().getType() == PacketType.Play.Client.KEEP_ALIVE) {
+                        super.onPacketSending(event);
+                        return;
+                    }
+
                     if (Settings.getInstance().getCancelC2SPackets()) {
                         if (Settings.getInstance().getCancelPacketMode() == Settings.CancelPacketMode.RANDOM) {
                             event.setCancelled(randomBoolean(Settings.getInstance().getCancelChance()));
@@ -90,20 +118,6 @@ public final class FuckassLag extends JavaPlugin {
         return getPlugin(FuckassLag.class);
     }
 
-    public static int randomInt(int start, int end) {
-        Random random = new Random();
-        return random.nextInt(start, end);
-    }
-
-    public static boolean randomBoolean(int chance) {
-        return randomInt(0, 100) <= chance;
-    }
-
-    public static int msToTicks(int ms) {
-        if (ms < 1) return ms;
-        return ms / 50;
-    }
-
     public static int getDelay() {
         boolean delayed = false;
 
@@ -134,6 +148,5 @@ public final class FuckassLag extends JavaPlugin {
         } else {
             return -1;
         }
-
     }
 }

@@ -9,12 +9,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a0c685c4-f692-42dc-8b6a-5542a19e5ed4" name="Changes" comment="so it loads now">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/beveled/fuckassLag/Commands/FuckassCommand.java" afterDir="false" />
+    <list default="true" id="a0c685c4-f692-42dc-8b6a-5542a19e5ed4" name="Changes" comment="added reload cmd">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/beveled/fuckassLag/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/fuckass_lag_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/fuckass_lag_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/beveled/fuckassLag/FuckassLag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/beveled/fuckassLag/FuckassLag.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/beveled/fuckassLag/FuckassLag.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/beveled/fuckassLag/FuckassLag.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testing/server.properties" beforeDir="false" afterPath="$PROJECT_DIR$/testing/server.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,12 +105,29 @@
       <option name="project" value="LOCAL" />
       <updated>1754575332302</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="added reload cmd">
+      <option name="closed" value="true" />
+      <created>1754576337104</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1754576337104</updated>
+    </task>
+    <task id="LOCAL-00004" summary="added reload cmd">
+      <option name="closed" value="true" />
+      <created>1754576368325</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1754576368325</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="might work idk" />
     <MESSAGE value="so it loads now" />
-    <option name="LAST_COMMIT_MESSAGE" value="so it loads now" />
+    <MESSAGE value="added reload cmd" />
+    <option name="LAST_COMMIT_MESSAGE" value="added reload cmd" />
   </component>
 </project>
