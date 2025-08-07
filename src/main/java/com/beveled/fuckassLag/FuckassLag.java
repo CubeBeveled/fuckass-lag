@@ -1,5 +1,6 @@
 package com.beveled.fuckassLag;
 
+import com.beveled.fuckassLag.Commands.FuckassCommand;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -10,8 +11,8 @@ import com.comphenix.protocol.events.PacketEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Objects;
 import java.util.Random;
-import java.util.random.RandomGenerator;
 
 public final class FuckassLag extends JavaPlugin {
     private ProtocolManager protocolManager;
@@ -77,7 +78,7 @@ public final class FuckassLag extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Plugin idk
+        Objects.requireNonNull(getCommand("fuckasslag")).setExecutor(new FuckassCommand());
     }
 
     @Override

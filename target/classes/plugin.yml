@@ -4,3 +4,13 @@ main: com.beveled.fuckassLag.FuckassLag
 api-version: '1.21'
 authors: [ BeveledCube ]
 depend: [ProtocolLib]
+commands:
+  fuckasslag:
+    description: "fuckasslag command"
+    usage: "/fuckasslag <reload>"
+    permission: fuckasslag.admin
+    permission-message: "You do not have permission to use this command"
+permissions:
+  fuckasslag.admin:
+    description: Admin permission
+    default: op
