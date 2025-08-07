@@ -1,5 +1,6 @@
 package com.beveled.fuckassLag;
 
+import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -9,6 +10,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Random;
 import java.util.random.RandomGenerator;
 
 public final class FuckassLag extends JavaPlugin {
@@ -20,7 +22,7 @@ public final class FuckassLag extends JavaPlugin {
         protocolManager = ProtocolLibrary.getProtocolManager();
 
         if (Settings.getInstance().getCancelS2CPackets() || Settings.getInstance().getDelayS2CPackets()) {
-            protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.LOWEST) {
+            protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.LOWEST, PacketType.Play.Server.getInstance().values()) {
                 @Override
                 public void onPacketSending(PacketEvent event) {
                     if (Settings.getInstance().getCancelS2CPackets()) {
@@ -47,7 +49,7 @@ public final class FuckassLag extends JavaPlugin {
         }
 
         if (Settings.getInstance().getCancelC2SPackets() || Settings.getInstance().getDelayC2SPackets()) {
-            protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.LOWEST) {
+            protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.LOWEST, PacketType.Play.Client.getInstance().values()) {
                 @Override
                 public void onPacketReceiving(PacketEvent event) {
                     if (Settings.getInstance().getCancelC2SPackets()) {
@@ -88,8 +90,8 @@ public final class FuckassLag extends JavaPlugin {
     }
 
     public static int randomInt(int start, int end) {
-        RandomGenerator generator = RandomGenerator.getDefault();
-        return generator.nextInt(start, end);
+        Random random = new Random();
+        return random.nextInt(start, end);
     }
 
     public static boolean randomBoolean(int chance) {
