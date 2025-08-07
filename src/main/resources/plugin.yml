@@ -1,0 +1,6 @@
+name: fuckass-lag
+version: '1.0-SNAPSHOT'
+main: com.beveled.fuckassLag.FuckassLag
+api-version: '1.21'
+authors: [ BeveledCube ]
+depend: [ProtocolLib]

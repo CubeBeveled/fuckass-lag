@@ -1,0 +1,22 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+
+# Environment-dependent path to Maven home directory
+/mavenHomeManager.xml
+
+# Testing server
+testing/logs/
+testing/world/
+testing/world_the_end/
+testing/world_nether/
+testing/libraries/
+testing/plugins/
+testing/*.jar
+testing/versions/
+testing/cache/
+testing/.console_history
+testing/banned-ips.json
+testing/banned-players.json
+testing/ops.json
+testing/usercache.json

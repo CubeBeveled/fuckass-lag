@@ -1,0 +1,41 @@
+cancel-packets:
+  # If server -> client can be cancelled
+  S2C: true
+
+  # If client -> server can be cancelled
+  C2S: true
+
+  packet-mode: RANDOM
+  cancel-chance: 20
+
+delay-packets:
+  # If server -> client can be delayed
+  S2C: true
+
+  # If client -> server can be delayed
+  C2S: true
+
+  # Controls which packets will be delayed
+  # ALL: delays all packets
+  # RANDOM: random packets will be delayed. The chance can be modified with delay-chance
+  packet-mode: RANDOM
+
+  # The chance that a given packet will be delayed (%)
+  delay-chance: 60
+
+  # Controls how much the packets will be delayed
+  # SET: delays packets by delay-ms
+  # RANDOMSET: delays packets by delay-ms + a number between delay-max and delay-min
+  # RANDOM: delays packets by a number between delay-max and delay-min
+  delay-mode: RANDOM
+  # How much will packets be delayed in milliseconds
+
+  # The values for delay-mode: SET and delay-mode: RANDOMSET
+  delay-ms: 500
+
+  # The values for delay-mode: RANDOM and delay-mode: RANDOMSET in milliseconds
+  delay-max: 2000
+  delay-min: 500
+
+# Don touch this unless you see warnings from this plugin in the console
+disable-warnings: false
