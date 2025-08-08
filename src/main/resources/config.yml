@@ -5,8 +5,11 @@ cancel-packets:
   # If client -> server can be cancelled
   C2S: true
 
+  # RANDOM: packets might be cancelled at random
   packet-mode: RANDOM
-  cancel-chance: 20
+
+  # The chance that a given packet will be cancelled (%). Only applies if packet-mode is RANDOM
+  cancel-chance: 10
 
 delay-packets:
   # If server -> client can be delayed
@@ -20,8 +23,8 @@ delay-packets:
   # RANDOM: random packets will be delayed. The chance can be modified with delay-chance
   packet-mode: RANDOM
 
-  # The chance that a given packet will be delayed (%)
-  delay-chance: 60
+  # The chance that a given packet will be delayed (%). Only applies if packet-mode is RANDOM
+  delay-chance: 30
 
   # Controls how much the packets will be delayed
   # SET: delays packets by delay-ms
@@ -34,8 +37,38 @@ delay-packets:
   delay-ms: 500
 
   # The values for delay-mode: RANDOM and delay-mode: RANDOMSET in milliseconds
-  delay-max: 2000
-  delay-min: 500
+  delay-max: 1000
+  delay-min: 100
 
 # Don touch this unless you see warnings from this plugin in the console
 disable-warnings: false
+
+# Will show what happens to packets in console
+# yes, it will spam the console
+debug: false
+
+# These packets won't be touched by the plugin
+# Don't modify this section if you don't know what you are doing
+ignored-packets:
+  # Only play packets are processed by the plugin
+  play:
+    client:
+      - KEEP_ALIVE
+      - CLIENT_TICK_END
+      - PLUGIN_MESSAGE
+    server:
+      - PLAYER_INFO
+      - PLAYER_INFO_REMOVE
+      - PLAYER_INFO_UPDATE
+      - PLAYER_LIST_HEADER_AND_FOOTER
+      - CHUNK_BATCH_BEGIN
+      - CHUNK_BATCH_END
+      - TAB_COMPLETE
+      - DECLARE_COMMANDS
+      - KEEP_ALIVE
+      - INITIALIZE_WORLD_BORDER
+      - TICKING_STATE
+      - TICKING_STEP
+      - STATISTICS
+      - BUNDLE
+      - BUNDLE_DELIMITER

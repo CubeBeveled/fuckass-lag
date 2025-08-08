@@ -1,8 +1,13 @@
 package com.beveled.fuckassLag;
 
+import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.protocol.packettype.PacketTypeCommon;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Settings {
     private final static Settings instance = new Settings();
@@ -13,6 +18,8 @@ public class Settings {
 
     // Other shit
     private boolean disableWarnings;
+    private boolean debug;
+    private Set<PacketTypeCommon> ignoredPackets;
 
     // Cancel packet shit
     private boolean cancelS2CPackets;
@@ -26,7 +33,7 @@ public class Settings {
     private boolean delayS2CPackets;
     private boolean delayC2SPackets;
     private DelayPacketMode delayPacketMode;
-    private int packetDelayChance;
+    private int delayChance;
     private DelayMode delayMode;
     private int delayMs;
     private int maxDelayMs;
@@ -50,7 +57,6 @@ public class Settings {
             e.printStackTrace();
         }
 
-        disableWarnings = Boolean.parseBoolean(config.getString("disable-warnings"));
 
         cancelS2CPackets = Boolean.parseBoolean(config.getString("cancel-packets.S2C"));
         cancelC2SPackets = Boolean.parseBoolean(config.getString("cancel-packets.C2S"));
@@ -60,11 +66,38 @@ public class Settings {
         delayS2CPackets = Boolean.parseBoolean(config.getString("delay-packets.S2C"));
         delayC2SPackets = Boolean.parseBoolean(config.getString("delay-packets.C2S"));
         delayPacketMode = parseDelayPacketMode(config.getString("delay-packets.packet-mode"));
-        packetDelayChance = config.getInt("delay-packets.delay-chance");
+        delayChance = config.getInt("delay-packets.delay-chance");
         delayMode = parseDelayMode(config.getString("delay-packets.delay-mode"));
         delayMs = config.getInt("delay-packets.delay-ms");
         maxDelayMs = config.getInt("delay-packets.delay-max");
         minDelayMs = config.getInt("delay-packets.delay-min");
+
+        disableWarnings = Boolean.parseBoolean(config.getString("disable-warnings"));
+        disableWarnings = Boolean.parseBoolean(config.getString("debug"));
+        ignoredPackets = config.getStringList("ignored-packets.play.server").stream()
+                .map(name -> {
+                    try {
+                        return PacketType.Play.Server.valueOf(name);
+                    } catch (IllegalArgumentException e) {
+                        FuckassLag.getInstance().getLogger().warning("Invalid server packet name in config: " + name);
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+        ignoredPackets.addAll(
+                config.getStringList("ignored-packets.play.client").stream()
+                        .map(name -> {
+                            try {
+                                return PacketType.Play.Client.valueOf(name);
+                            } catch (IllegalArgumentException e) {
+                                FuckassLag.getInstance().getLogger().warning("Invalid client packet name in config: " + name);
+                                return null;
+                            }
+                        })
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toSet())
+        );
     }
 
     public void save() {
@@ -84,6 +117,14 @@ public class Settings {
     // Other
     public boolean getDisableWarnings() {
         return disableWarnings;
+    }
+
+    public boolean getDebug() {
+        return debug;
+    }
+
+    public Set<PacketTypeCommon> getIgnoredPackets() {
+        return ignoredPackets;
     }
 
     // Cancel shit
@@ -116,8 +157,8 @@ public class Settings {
         return delayPacketMode;
     }
 
-    public int getPacketDelayChance() {
-        return packetDelayChance;
+    public int getDelayChance() {
+        return delayChance;
     }
 
     public int getDelayMs() {

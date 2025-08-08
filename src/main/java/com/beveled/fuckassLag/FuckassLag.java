@@ -1,152 +1,49 @@
 package com.beveled.fuckassLag;
 
 import com.beveled.fuckassLag.Commands.FuckassCommand;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
-import org.bukkit.Bukkit;
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
+import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.protocol.packettype.PacketTypeCommon;
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.StreamSupport;
-
-import static com.beveled.fuckassLag.Utils.*;
 
 public final class FuckassLag extends JavaPlugin {
-    private ProtocolManager protocolManager;
-    Set<PacketType> dontTouchPackets = Set.of(
-            PacketType.Play.Server.KEEP_ALIVE,
-            PacketType.Play.Client.KEEP_ALIVE,
-            PacketType.Play.Server.PLAYER_INFO,
-            PacketType.Play.Server.PLAYER_INFO_REMOVE,
-            PacketType.Play.Server.PLAYER_LIST_HEADER_FOOTER,
-            PacketType.Play.Client.TAB_COMPLETE
-    );
-
     @Override
     public void onLoad() {
+        this.getLogger().info("Loading settings");
         Settings.getInstance().load();
-        protocolManager = ProtocolLibrary.getProtocolManager();
 
-        if (Settings.getInstance().getCancelS2CPackets() || Settings.getInstance().getDelayS2CPackets()) {
-            protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.LOWEST,
-                    StreamSupport.stream(PacketType.values().spliterator(), false)
-                            .filter(pt -> pt.getProtocol() == PacketType.Protocol.PLAY && pt.isServer() && pt.isSupported())
-                            .toArray(PacketType[]::new)
-            ) {
-                @Override
-                public void onPacketSending(PacketEvent event) {
-                    if (dontTouchPackets.contains(event.getPacket().getType())) {
-                        return;
-                    }
+        this.getLogger().info("Loading packetevents");
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
+        PacketEvents.getAPI().load();
 
-                    if (Settings.getInstance().getCancelS2CPackets()) {
-                        if (Settings.getInstance().getCancelPacketMode() == Settings.CancelPacketMode.RANDOM) {
-                            event.setCancelled(randomBoolean(Settings.getInstance().getCancelChance()));
-                        }
-                    }
+        this.getLogger().info("Registering events");
+        if (Settings.getInstance().getCancelC2SPackets() || Settings.getInstance().getDelayC2SPackets())
+            PacketEvents.getAPI().getEventManager().registerListener(new C2SPacketListener(), PacketListenerPriority.LOWEST);
 
-                    if (!event.isCancelled() && Settings.getInstance().getDelayS2CPackets()) {
-                        int delay = getDelay();
-
-                        PacketContainer cloned = event.getPacket().shallowClone();
-
-                        event.setCancelled(true);
-
-                        Bukkit.getScheduler().runTaskLater(FuckassLag.this, () -> {
-                            protocolManager.sendServerPacket(event.getPlayer(), cloned);
-                        }, delay);
-                    }
-
-                    if (!event.isCancelled()) super.onPacketSending(event);
-                }
-            });
-        }
-
-        if (Settings.getInstance().getCancelC2SPackets() || Settings.getInstance().getDelayC2SPackets()) {
-            protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.LOWEST,
-                    StreamSupport.stream(PacketType.values().spliterator(), false)
-                            .filter(pt -> pt.getProtocol() == PacketType.Protocol.PLAY && pt.getSender() == PacketType.Sender.CLIENT && pt.isSupported())
-                            .toArray(PacketType[]::new)
-            ) {
-                @Override
-                public void onPacketReceiving(PacketEvent event) {
-                    if (event.getPacket().getType() == PacketType.Play.Client.KEEP_ALIVE) {
-                        super.onPacketSending(event);
-                        return;
-                    }
-
-                    if (Settings.getInstance().getCancelC2SPackets()) {
-                        if (Settings.getInstance().getCancelPacketMode() == Settings.CancelPacketMode.RANDOM) {
-                            event.setCancelled(randomBoolean(Settings.getInstance().getCancelChance()));
-                        }
-                    }
-
-                    if (!event.isCancelled() && Settings.getInstance().getDelayC2SPackets()) {
-                        int delay = getDelay();
-                        PacketContainer cloned = event.getPacket().shallowClone();
-
-                        event.setCancelled(true);
-
-                        Bukkit.getScheduler().runTaskLater(FuckassLag.this, () -> {
-                            protocolManager.receiveClientPacket(event.getPlayer(), cloned);
-                        }, delay);
-                    }
-
-                    if (!event.isCancelled()) super.onPacketReceiving(event);
-                }
-            });
-        }
+        if (Settings.getInstance().getCancelS2CPackets() || Settings.getInstance().getDelayS2CPackets())
+            PacketEvents.getAPI().getEventManager().registerListener(new S2CPacketListener(), PacketListenerPriority.LOWEST);
     }
 
     @Override
     public void onEnable() {
+        this.getLogger().info("Loading commands");
         Objects.requireNonNull(getCommand("fuckasslag")).setExecutor(new FuckassCommand());
+        this.getLogger().info("Initializing packetevents");
+        PacketEvents.getAPI().init();
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        this.getLogger().info("Terminating packetevents");
+        PacketEvents.getAPI().terminate();
     }
 
     public static FuckassLag getInstance() {
         return getPlugin(FuckassLag.class);
-    }
-
-    public static int getDelay() {
-        boolean delayed = false;
-
-        if (Settings.getInstance().getDelayPacketMode() == Settings.DelayPacketMode.ALL) {
-            delayed = true;
-        } else if (Settings.getInstance().getDelayPacketMode() == Settings.DelayPacketMode.RANDOM) {
-            delayed = randomBoolean(Settings.getInstance().getPacketDelayChance());
-        } else {
-            if (!Settings.getInstance().getDisableWarnings())
-                FuckassLag.getInstance().getLogger().warning("DelayPacketMode has a value that isn't being handled. Please notify the author about this. Set disable-warnings to true in the config to hide this message.");
-        }
-
-        if (delayed) {
-            int delayMs = -1;
-
-            if (Settings.getInstance().getDelayMode() == Settings.DelayMode.SET) {
-                delayMs = Settings.getInstance().getDelayMs();
-            } else if (Settings.getInstance().getDelayMode() == Settings.DelayMode.RANDOMSET) {
-                delayMs = Settings.getInstance().getDelayMs() + randomInt(Settings.getInstance().getMinDelayMs(), Settings.getInstance().getMaxDelayMs());
-            } else if (Settings.getInstance().getDelayMode() == Settings.DelayMode.RANDOM) {
-                delayMs = randomInt(Settings.getInstance().getMinDelayMs(), Settings.getInstance().getMaxDelayMs());
-            } else {
-                if (!Settings.getInstance().getDisableWarnings())
-                    FuckassLag.getInstance().getLogger().warning("DelayMode has a value that isn't being handled. Please notify the author about this. Set disable-warnings to true in the config to hide this message.");
-            }
-
-            return msToTicks(delayMs);
-        } else {
-            return -1;
-        }
     }
 }
