@@ -36,6 +36,9 @@ public class FuckassCommand implements CommandExecutor, TabExecutor {
                 options.put("Delay max (ms)", stringify(Settings.getInstance().getMaxDelayMs()));
                 options.put("Delay min (ms)", stringify(Settings.getInstance().getMinDelayMs()));
 
+                options.put("Disable warnings", stringify(Settings.getInstance().getDisableWarnings()));
+                options.put("Debug", stringify(Settings.getInstance().getDebug()));
+
                 sender.sendMessage(Component.text("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~").color(TextColor.color(0, 60, 242)));
                 for (Map.Entry<String, String> entry : options.entrySet()) {
                     String option = entry.getKey();

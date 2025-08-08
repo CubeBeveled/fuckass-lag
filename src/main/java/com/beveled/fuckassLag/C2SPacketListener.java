@@ -28,7 +28,7 @@ public class C2SPacketListener implements PacketListener {
 
         if (!event.isCancelled() && settings.getDelayC2SPackets()) {
             int delay = getDelay();
-            if (delay < 1) {
+            if (delay > 0) {
                 PacketReceiveEvent cloned = event.clone();
                 event.setCancelled(true);
 
@@ -39,7 +39,5 @@ public class C2SPacketListener implements PacketListener {
                 }, delay);
             }
         }
-
-        if (event.isCancelled()) FuckassLag.getInstance().getLogger().info("[Cancelled]");
     }
 }

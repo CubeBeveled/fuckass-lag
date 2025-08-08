@@ -28,7 +28,7 @@ public class S2CPacketListener implements PacketListener {
 
         if (!event.isCancelled() && settings.getDelayS2CPackets()) {
             int delay = getDelay();
-            if (delay < 1) {
+            if (delay > 0) {
                 PacketSendEvent cloned = event.clone();
                 event.setCancelled(true);
 

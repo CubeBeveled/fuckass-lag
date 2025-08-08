@@ -73,7 +73,7 @@ public class Settings {
         minDelayMs = config.getInt("delay-packets.delay-min");
 
         disableWarnings = Boolean.parseBoolean(config.getString("disable-warnings"));
-        disableWarnings = Boolean.parseBoolean(config.getString("debug"));
+        debug = Boolean.parseBoolean(config.getString("debug"));
         ignoredPackets = config.getStringList("ignored-packets.play.server").stream()
                 .map(name -> {
                     try {

@@ -49,6 +49,7 @@ debug: false
 
 # These packets won't be touched by the plugin
 # Don't modify this section if you don't know what you are doing
+# List of packets: https://minecraft.wiki/w/Java_Edition_protocol/Packets
 ignored-packets:
   # Only play packets are processed by the plugin
   play:
@@ -56,6 +57,7 @@ ignored-packets:
       - KEEP_ALIVE
       - CLIENT_TICK_END
       - PLUGIN_MESSAGE
+      - TELEPORT_CONFIRM
     server:
       - PLAYER_INFO
       - PLAYER_INFO_REMOVE
@@ -71,4 +73,3 @@ ignored-packets:
       - TICKING_STEP
       - STATISTICS
       - BUNDLE
-      - BUNDLE_DELIMITER
