@@ -9,12 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a0c685c4-f692-42dc-8b6a-5542a19e5ed4" name="Changes" comment="switched to packetevents, its lookin good">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/beveled/fuckassLag/C2SPacketListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/beveled/fuckassLag/C2SPacketListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/beveled/fuckassLag/Commands/FuckassCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/beveled/fuckassLag/Commands/FuckassCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/beveled/fuckassLag/S2CPacketListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/beveled/fuckassLag/S2CPacketListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/beveled/fuckassLag/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/beveled/fuckassLag/Settings.java" afterDir="false" />
+    <list default="true" id="a0c685c4-f692-42dc-8b6a-5542a19e5ed4" name="Changes" comment="idk works better ?">
       <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testing/server.properties" beforeDir="false" afterPath="$PROJECT_DIR$/testing/server.properties" afterDir="false" />
     </list>
@@ -137,7 +132,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754666792981</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="idk works better ?">
+      <option name="closed" value="true" />
+      <created>1754667589973</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1754667589973</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -146,6 +149,7 @@
     <MESSAGE value="added reload cmd" />
     <MESSAGE value="fuckass protocollib" />
     <MESSAGE value="switched to packetevents, its lookin good" />
-    <option name="LAST_COMMIT_MESSAGE" value="switched to packetevents, its lookin good" />
+    <MESSAGE value="idk works better ?" />
+    <option name="LAST_COMMIT_MESSAGE" value="idk works better ?" />
   </component>
 </project>

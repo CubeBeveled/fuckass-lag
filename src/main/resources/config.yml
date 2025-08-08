@@ -1,6 +1,6 @@
 cancel-packets:
   # If server -> client can be cancelled
-  S2C: true
+  S2C: false
 
   # If client -> server can be cancelled
   C2S: true
@@ -13,7 +13,7 @@ cancel-packets:
 
 delay-packets:
   # If server -> client can be delayed
-  S2C: true
+  S2C: false
 
   # If client -> server can be delayed
   C2S: true
